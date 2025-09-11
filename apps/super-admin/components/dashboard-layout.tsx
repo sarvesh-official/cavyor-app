@@ -126,7 +126,7 @@ export function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-800">
+    <div className="flex h-screen bg-background">
       <Sidebar
         sections={customSidebarSections || sidebarSections}
         activeItem={getActiveItem()}
@@ -143,7 +143,7 @@ export function DashboardLayout({
           primaryAction={primaryAction || defaultPrimaryAction}
         />
         
-        <main className="flex-1 overflow-y-auto p-6 bg-gray-800">
+        <main className="flex-1 overflow-y-auto p-6 bg-background">
           {children}
         </main>
       </div>

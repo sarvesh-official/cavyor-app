@@ -157,7 +157,7 @@ export default function TenantBrandingPage() {
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Logo URL
                   </label>
                   <Input
@@ -193,7 +193,7 @@ export default function TenantBrandingPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Primary Color
                   </label>
                   <div className="flex space-x-3">
@@ -201,14 +201,14 @@ export default function TenantBrandingPage() {
                       type="color"
                       value={branding.primaryColor}
                       onChange={(e) => handleColorChange('primaryColor', e.target.value)}
-                      className="h-10 w-20 border border-gray-600 rounded cursor-pointer bg-gray-700"
+                      className="h-10 w-20 border border-border rounded cursor-pointer bg-background"
                     />
                     <Input
                       type="text"
                       value={branding.primaryColor}
                       onChange={(e) => handleColorChange('primaryColor', e.target.value)}
                       placeholder="#F44336"
-                      className="flex-1 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400"
+                      className="flex-1"
                     />
                   </div>
                   <div className="mt-2 p-3 rounded" style={{ backgroundColor: branding.primaryColor }}>
@@ -219,7 +219,7 @@ export default function TenantBrandingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Secondary Color
                   </label>
                   <div className="flex space-x-3">
@@ -227,14 +227,14 @@ export default function TenantBrandingPage() {
                       type="color"
                       value={branding.secondaryColor}
                       onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
-                      className="h-10 w-20 border border-gray-600 rounded cursor-pointer bg-gray-700"
+                      className="h-10 w-20 border border-border rounded cursor-pointer bg-background"
                     />
                     <Input
                       type="text"
                       value={branding.secondaryColor}
                       onChange={(e) => handleColorChange('secondaryColor', e.target.value)}
                       placeholder="#FFFFFF"
-                      className="flex-1 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400"
+                      className="flex-1"
                     />
                   </div>
                   <div className="mt-2 p-3 rounded" style={{ backgroundColor: branding.secondaryColor }}>
@@ -252,7 +252,7 @@ export default function TenantBrandingPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="bg-white text-black hover:bg-gray-100"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               <Save className="h-4 w-4 mr-2" />
               {loading ? 'Updating...' : 'Update Branding'}

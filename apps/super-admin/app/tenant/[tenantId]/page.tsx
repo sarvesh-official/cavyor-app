@@ -14,15 +14,16 @@ import {
   Building2,
   Star,
   User,
-  Palette
+  Palette,
+  BarChart3
 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 
 interface TenantSettingsPageProps {
-  params: {
+  params: Promise<{
     tenantId: string
-  }
+  }>
 }
 
 interface TenantBranding {
@@ -33,7 +34,7 @@ interface TenantBranding {
 
 export default function TenantSettingsPage({ params }: TenantSettingsPageProps) {
   const router = useRouter()
-  const { tenantId } = params
+  const { tenantId } = use(params)
 
   // State for branding
   const [branding, setBranding] = useState<TenantBranding>({
@@ -223,6 +224,51 @@ export default function TenantSettingsPage({ params }: TenantSettingsPageProps) 
               </Card>
             )
           })}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+          <Card className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors cursor-pointer" onClick={() => router.push(`/tenant/${tenantId}/menu`)}>
+            <CardContent className="p-6 text-center">
+              <div className="flex flex-col items-center space-y-3">
+                <div className="p-3 bg-gray-700 rounded-lg">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">Manage Menu</h3>
+                  <p className="text-gray-400 text-sm">View and edit restaurant menu</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors cursor-pointer">
+            <CardContent className="p-6 text-center">
+              <div className="flex flex-col items-center space-y-3">
+                <div className="p-3 bg-gray-700 rounded-lg">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">Team Members</h3>
+                  <p className="text-gray-400 text-sm">Manage staff and permissions</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors cursor-pointer">
+            <CardContent className="p-6 text-center">
+              <div className="flex flex-col items-center space-y-3">
+                <div className="p-3 bg-gray-700 rounded-lg">
+                  <BarChart3 className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">Analytics</h3>
+                  <p className="text-gray-400 text-sm">View performance metrics</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Restaurant Details Grid */}
