@@ -160,16 +160,19 @@ export default function MenuPage() {
       onBackClick={() => router.push("/restaurants")}
     >
       <div className="space-y-6 sm:space-y-8">
-        {/* Trending on Your Menu Section */}
+        {/* What's On Your Menu Section */}
         <div className="space-y-4 sm:space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="space-y-1 sm:space-y-2">
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Trending on Your Menu</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">What's On Your Menu</h1>
               <p className="text-sm sm:text-base text-muted-foreground">See what's winning hearts and driving sales today</p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-              <Button className="bg-muted text-muted-foreground hover:bg-muted/80 flex items-center gap-2 text-sm sm:text-base">
+              <Button 
+                className="bg-muted text-muted-foreground hover:bg-muted/80 flex items-center gap-2 text-sm sm:text-base"
+                onClick={() => router.push(`/tenant/${tenantId}/menu/edit`)}
+              >
                 <Plus className="h-4 w-4" />
                 Edit Details
               </Button>
@@ -178,7 +181,7 @@ export default function MenuPage() {
                 onClick={() => router.push(`/tenant/${tenantId}/menu/new/edit`)}
               >
                 <Plus className="h-4 w-4" />
-                Upload Dish
+                Upload
               </Button>
             </div>
           </div>
@@ -221,15 +224,7 @@ export default function MenuPage() {
               </Card>
             ))}
           </div>
-        </div>
 
-        {/* What's On Your Menu Section */}
-        <div className="space-y-6">
-          <div className="space-y-1 sm:space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">What's On Your Menu</h1>
-            <p className="text-sm sm:text-base text-muted-foreground">See what's winning hearts and driving sales today</p>
-          </div>
-          
           {/* Category Icons */}
           <div className="flex gap-3 sm:gap-4 md:gap-6 pb-4 overflow-x-auto scrollbar-hide flex-nowrap w-full" style={{ minWidth: 'max-content' }}>
             {categories.map((category) => {

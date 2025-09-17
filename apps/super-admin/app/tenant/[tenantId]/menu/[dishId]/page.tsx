@@ -161,24 +161,33 @@ export default function DishViewPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Dish Tags */}
-            <div className="flex flex-wrap gap-3">
-              {dishData.isSpecial && (
-                <Badge className="bg-red-600 text-white flex items-center gap-2 px-3 py-1">
-                  <Heart className="h-4 w-4" />
-                  Special Dish
+            {/* Dish Tags and Edit Button */}
+            <div className="flex flex-wrap gap-3 items-start justify-between">
+              <div className="flex flex-wrap gap-3">
+                {dishData.isSpecial && (
+                  <Badge className="bg-red-600 text-white flex items-center gap-2 px-3 py-1">
+                    <Heart className="h-4 w-4" />
+                    Special Dish
+                  </Badge>
+                )}
+                <Badge className="bg-green-600 text-white flex items-center gap-2 px-3 py-1">
+                  <Clock className="h-4 w-4" />
+                  {dishData.preparationDate}
                 </Badge>
-              )}
-              <Badge className="bg-green-600 text-white flex items-center gap-2 px-3 py-1">
-                <Clock className="h-4 w-4" />
-                {dishData.preparationDate}
-              </Badge>
-              <Button
-                variant="outline"
-                className="border-dashed border-gray-600 text-gray-400 hover:bg-gray-700 hover:text-white rounded-full px-4 py-2"
+                <Button
+                  variant="outline"
+                  className="border-dashed border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-full px-4 py-2"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Text Property
+                </Button>
+              </div>
+              <Button 
+                onClick={handleEditDetails}
+                className="bg-green-600 text-white hover:bg-green-700 flex items-center gap-2"
               >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Text Property
+                <Edit className="h-4 w-4" />
+                Edit Details
               </Button>
             </div>
 
@@ -194,11 +203,10 @@ export default function DishViewPage() {
               </div>
               <div className="flex flex-col gap-3">
                 <Button 
-                  onClick={handleEditDetails}
-                  className="bg-green-600 text-white hover:bg-green-700 flex items-center gap-2"
+                  className="bg-red-600 text-white hover:bg-red-700 flex items-center gap-2"
                 >
-                  <Edit className="h-4 w-4" />
-                  Edit Details
+                  <Box className="h-4 w-4" />
+                  Try in 3D
                 </Button>
                 <Button
                   variant="ghost"

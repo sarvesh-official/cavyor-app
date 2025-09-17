@@ -4,10 +4,11 @@ const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:5000';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { tenantId: string } }
+  { params }: { params: Promise<{ tenantId: string }> }
 ) {
   try {
-    const response = await fetch(`${API_BASE_URL}/tenants/${params.tenantId}/branding`);
+    const { tenantId } = await params;
+    const response = await fetch(`${API_BASE_URL}/tenants/${tenantId}/branding`);
     
     if (!response.ok) {
       return NextResponse.json(
@@ -29,12 +30,13 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { tenantId: string } }
+  { params }: { params: Promise<{ tenantId: string }> }
 ) {
   try {
+    const { tenantId } = await params;
     const body = await request.json();
     
-    const response = await fetch(`${API_BASE_URL}/tenants/${params.tenantId}/branding`, {
+    const response = await fetch(`${API_BASE_URL}/tenants/${tenantId}/branding`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
