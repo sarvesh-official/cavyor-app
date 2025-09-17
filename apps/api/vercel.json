@@ -1,6 +1,11 @@
 {
   "version": 2,
   "buildCommand": "turbo build",
-  "outputDirectory": ".vercel/output",
-  "framework": null
+  "outputDirectory": "dist",
+  "framework": null,
+  "functions": {
+    "dist/main.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
 }
