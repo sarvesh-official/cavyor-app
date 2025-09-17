@@ -5,14 +5,29 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['http://localhost:3001', 'http://localhost:3002'],
+    origin: process.env.VERCEL
+      ? true
+      : ['http://localhost:3001', 'http://localhost:3002'],
     credentials: true,
   });
 
-  await app.listen(process.env.PORT ?? 5000);
+  if (process.env.VERCEL) {
+    // For Vercel serverless deployment
+    await app.init();
+    return app;
+  } else {
+    // For local development
+    await app.listen(process.env.PORT ?? 5000);
+  }
 }
 
-bootstrap().catch((error) => {
-  console.error('Failed to start application:', error);
-  process.exit(1);
-});
+// For Vercel deployment
+if (process.env.VERCEL) {
+  module.exports = bootstrap();
+} else {
+  // For local development
+  bootstrap().catch((error) => {
+    console.error('Failed to start application:', error);
+    process.exit(1);
+  });
+}
