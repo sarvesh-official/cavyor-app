@@ -2,10 +2,5 @@
   "version": 2,
   "buildCommand": "turbo build",
   "outputDirectory": "dist",
-  "framework": null,
-  "functions": {
-    "dist/main.js": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "framework": null
 }
