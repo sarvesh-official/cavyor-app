@@ -9,8 +9,8 @@
     "check-types": "turbo run check-types",
     "api:dev": "turbo run start:dev --filter=api",
     "api:build": "turbo run build --filter=api",
-    "web:dev": "turbo run dev --filter=cavyor",
-    "admin:dev": "turbo run dev --filter=super-admin"
+    "web:dev": "turbo run dev --filter=cavyor" ,
+      "admin:dev": "turbo run dev --filter=super-admin"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
