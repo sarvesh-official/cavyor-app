@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "turbo build",
-  "outputDirectory": "dist",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm build --filter=api...",
   "framework": null
 }
