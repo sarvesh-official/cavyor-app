@@ -82,14 +82,14 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
           )}
         </div>
 
-        <div className="flex items-center space-x-4 flex-1 max-w-sm ml-6 mr-auto">
+        <div className="flex items-center space-x-4 flex-1 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg ml-4 sm:ml-6 mr-auto">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder={searchPlaceholder}
               value={searchValue}
               onChange={handleSearchChange}
-              className="pl-10 pr-16 rounded-md bg-muted/30 w-full"
+              className="pl-10 pr-16 rounded-xl bg-muted/30 w-full h-12"
             />
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
               <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
@@ -99,10 +99,10 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
           </div>
         </div>
 
-        <div className="flex items-center space-x-3 ml-auto">
+        <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
           <div 
             className={cn(
-              "w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer",
+              "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer",
               isDark 
                 ? "hover:opacity-80" 
                 : "bg-gray-200 hover:bg-gray-300"
@@ -118,7 +118,7 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
           
           <div 
             className={cn(
-              "w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer",
+              "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer",
               isDark 
                 ? "hover:opacity-80" 
                 : "bg-gray-200 hover:bg-gray-300"
@@ -133,10 +133,10 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
           {primaryAction && (
             <Button
               onClick={primaryAction.onClick}
-              className="flex items-center space-x-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6 h-10"
+              className="flex items-center space-x-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-4 sm:px-6 h-10"
             >
               {primaryAction.icon && <primaryAction.icon className="h-4 w-4" />}
-              <span className="font-medium">{primaryAction.label}</span>
+              <span className="font-medium hidden sm:inline">{primaryAction.label}</span>
             </Button>
           )}
         </div>

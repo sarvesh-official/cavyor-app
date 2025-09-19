@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { DashboardLayout } from "@/components/dashboard-layout";
 import { getTenantSidebarSections } from "@/constants";
 
-export default function MenuLayout({
+export default function BrandingLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export default function MenuLayout({
       showBackButton={true}
       onBackClick={() => router.push('/restaurants')}
       customSidebarSections={tenantSidebarSections}
-      activeItem="menu"
+      activeItem="branding"
     >
       {children}
     </DashboardLayout>

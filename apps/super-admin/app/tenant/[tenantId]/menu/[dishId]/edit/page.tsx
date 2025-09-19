@@ -6,17 +6,12 @@ import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
 import { Card, CardContent } from "@workspace/ui/components/card";
 import { 
-  FileText,
-  Folder,
-  Users,
-  Settings,
   Plus,
   Upload,
   Save,
   X
 } from "lucide-react";
 import Image from "next/image";
-import { DashboardLayout } from "@/components/dashboard-layout";
 
 interface DishProperty {
   id: string;
@@ -45,44 +40,6 @@ export default function EditDishPage() {
   ]);
   const [allergens, setAllergens] = useState<Allergen[]>([]);
 
-  const menuSidebarSections = [
-    {
-      title: "Tenant Settings",
-      items: [
-        {
-          id: "overview",
-          label: "Overview",
-          icon: FileText,
-          href: `/tenant/${tenantId}`
-        },
-        {
-          id: "menu",
-          label: "Menu", 
-          icon: FileText,
-          href: `/tenant/${tenantId}/menu`
-        },
-        {
-          id: "repository",
-          label: "Repository",
-          icon: Folder,
-          href: `/tenant/${tenantId}/repository`
-        },
-        {
-          id: "members",
-          label: "Members",
-          icon: Users,
-          href: `/tenant/${tenantId}/members`
-        },
-        {
-          id: "settings",
-          label: "Settings",
-          icon: Settings,
-          href: `/tenant/${tenantId}/settings`
-        }
-      ]
-    }
-  ];
-
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -102,10 +59,23 @@ export default function EditDishPage() {
     );
   };
 
+  const addProperty = () => {
+    const newProperty: DishProperty = {
+      id: Date.now().toString(),
+      name: "New Property",
+      value: ""
+    };
+    setProperties(prev => [...prev, newProperty]);
+  };
+
+  const removeProperty = (id: string) => {
+    setProperties(prev => prev.filter(prop => prop.id !== id));
+  };
+
   const addAllergen = () => {
     const newAllergen: Allergen = {
       id: Date.now().toString(),
-      name: ""
+      name: "New Allergen"
     };
     setAllergens(prev => [...prev, newAllergen]);
   };
@@ -114,160 +84,217 @@ export default function EditDishPage() {
     setAllergens(prev => prev.filter(allergen => allergen.id !== id));
   };
 
-  const handleAllergenChange = (id: string, name: string) => {
-    setAllergens(prev => 
-      prev.map(allergen => 
-        allergen.id === id ? { ...allergen, name } : allergen
-      )
-    );
-  };
-
   const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving dish:", { foodName, description, properties, allergens });
-    router.push(`/tenant/${tenantId}/menu`);
+    console.log("Saving dish...", {
+      dishId,
+      foodName,
+      description,
+      properties,
+      allergens,
+      dishImage
+    });
+    router.push(`/tenant/${tenantId}/menu/${dishId}`);
   };
 
   return (
-    <DashboardLayout 
-      customSidebarSections={menuSidebarSections}
-      activeItem="menu"
-      title="Edit Menu Item"
-      showBackButton={true}
-      onBackClick={() => router.push(`/tenant/${tenantId}/menu`)}
-    >
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* Dish Image Section */}
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-6">
-            <div className="relative">
-              <div className="w-full h-64 bg-gray-700 rounded-lg border-2 border-dashed border-gray-600 flex items-center justify-center">
-                {dishImage ? (
-                  <Image
-                    src={dishImage}
-                    alt="Dish"
-                    width={400}
-                    height={256}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                ) : (
-                  <div className="text-center text-gray-400">
-                    <Upload className="h-12 w-12 mx-auto mb-4" />
-                    <p>No image uploaded</p>
-                  </div>
-                )}
-              </div>
-              <Button
-                className="absolute bottom-4 right-4 bg-gray-800 text-white hover:bg-gray-700 flex items-center gap-2"
-                onClick={() => document.getElementById('image-upload')?.click()}
-              >
-                <Plus className="h-4 w-4" />
-                Upload Dish Image
-              </Button>
-              <input
-                id="image-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Dish Properties Section */}
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-6">
-            <div className="flex flex-wrap gap-4 items-center justify-between">
-              <div className="flex flex-wrap gap-4">
-                 {properties.map((property) => (
-                   <div key={property.id} className="relative">
-                     {property.id === "2" ? (
-                       <Input
-                         type="date"
-                         placeholder={property.name}
-                         value={property.value}
-                         onChange={(e) => handlePropertyChange(property.id, e.target.value)}
-                         className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 rounded-full px-4 py-2 min-w-[150px]"
-                       />
-                     ) : (
-                       <Input
-                         placeholder={property.name}
-                         value={property.value}
-                         onChange={(e) => handlePropertyChange(property.id, e.target.value)}
-                         className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 rounded-full px-4 py-2 min-w-[150px]"
-                       />
-                     )}
-                   </div>
-                 ))}
-              </div>
-              <Button 
-                onClick={handleSave}
-                className="bg-green-600 text-white hover:bg-green-700 flex items-center gap-2"
-              >
-                <Save className="h-4 w-4" />
-                Save Changes
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Food Name and Description */}
-        <div className="space-y-6">
-          <Input
-            placeholder="FOOD NAME"
-            value={foodName}
-            onChange={(e) => setFoodName(e.target.value)}
-            className="bg-gray-800 border-gray-700 text-white placeholder-gray-400 text-lg py-4 px-4"
-          />
-          
-          <Input
-            placeholder="DESCRIPTION"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="bg-gray-800 border-gray-700 text-white placeholder-gray-400 text-lg py-4 px-4"
-          />
+    <div className="max-w-4xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-foreground">Edit Dish</h1>
+          <div className="flex space-x-3">
+            <Button 
+              variant="outline" 
+              className="rounded-full"
+              onClick={() => router.push(`/tenant/${tenantId}/menu/${dishId}`)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+              onClick={handleSave}
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Save Changes
+            </Button>
+          </div>
         </div>
 
-        {/* Allergen Section */}
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">Allergen</h3>
-              
-              <div className="flex flex-wrap gap-3">
-                {allergens.map((allergen) => (
-                  <div key={allergen.id} className="flex items-center gap-2 bg-gray-700 rounded-full px-4 py-2">
-                    <Input
-                      value={allergen.name}
-                      onChange={(e) => handleAllergenChange(allergen.id, e.target.value)}
-                      placeholder="Allergen name"
-                      className="bg-transparent border-none text-white placeholder-gray-400 p-0 min-w-[120px]"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeAllergen(allergen.id)}
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-white"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-                
-                <Button
-                  onClick={addAllergen}
-                  variant="outline"
-                  className="border-dashed border-gray-600 text-gray-400 hover:bg-gray-700 hover:text-white rounded-full px-4 py-2"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </DashboardLayout>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left Side - Image Upload */}
+          <div className="space-y-6">
+            <Card className="bg-card border-border rounded-2xl">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-4">Dish Image</h3>
+                <div className="relative">
+                  {dishImage ? (
+                    <div className="relative">
+                      <Image
+                        src={dishImage}
+                        alt="Dish preview"
+                        width={400}
+                        height={300}
+                        className="w-full h-64 object-cover rounded-lg"
+                      />
+                      <Button
+                        onClick={() => setDishImage(null)}
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2 rounded-full"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <label className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer block">
+                      <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Click to upload or drag and drop
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        PNG, JPG or GIF (max. 5MB)
+                      </p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Side - Form Fields */}
+          <div className="space-y-6">
+            {/* Basic Info */}
+            <Card className="bg-card border-border rounded-2xl">
+              <CardContent className="p-6 space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Dish Name
+                  </label>
+                  <Input 
+                    placeholder="Enter dish name" 
+                    className="rounded-lg"
+                    value={foodName}
+                    onChange={(e) => setFoodName(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">
+                    Description
+                  </label>
+                  <textarea 
+                    placeholder="Enter dish description"
+                    className="w-full p-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground resize-none"
+                    rows={3}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Properties */}
+            <Card className="bg-card border-border rounded-2xl">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-foreground">Properties</h3>
+                  <Button 
+                    onClick={addProperty}
+                    variant="outline" 
+                    size="sm"
+                    className="rounded-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Property
+                  </Button>
+                </div>
+
+                <div className="space-y-3">
+                  {properties.map((property) => (
+                    <div key={property.id} className="flex items-center space-x-2">
+                      <Input
+                        placeholder="Property name"
+                        value={property.name}
+                        onChange={(e) => handlePropertyChange(property.id, e.target.value)}
+                        className="flex-1 rounded-lg"
+                      />
+                      <Input
+                        placeholder="Value"
+                        value={property.value}
+                        onChange={(e) => handlePropertyChange(property.id, e.target.value)}
+                        className="flex-1 rounded-lg"
+                      />
+                      <Button
+                        onClick={() => removeProperty(property.id)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive hover:text-destructive rounded-full"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Allergens */}
+            <Card className="bg-card border-border rounded-2xl">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-foreground">Allergens</h3>
+                  <Button 
+                    onClick={addAllergen}
+                    variant="outline" 
+                    size="sm"
+                    className="rounded-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Allergen
+                  </Button>
+                </div>
+
+                <div className="space-y-3">
+                  {allergens.map((allergen) => (
+                    <div key={allergen.id} className="flex items-center space-x-2">
+                      <Input
+                        placeholder="Allergen name"
+                        value={allergen.name}
+                        onChange={(e) => {
+                          setAllergens(prev => 
+                            prev.map(a => 
+                              a.id === allergen.id ? { ...a, name: e.target.value } : a
+                            )
+                          );
+                        }}
+                        className="flex-1 rounded-lg"
+                      />
+                      <Button
+                        onClick={() => removeAllergen(allergen.id)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive hover:text-destructive rounded-full"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  
+                  {allergens.length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      No allergens added yet
+                    </p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+    </div>
   );
 }

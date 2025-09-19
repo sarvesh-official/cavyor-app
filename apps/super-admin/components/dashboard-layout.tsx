@@ -4,16 +4,9 @@ import * as React from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { Sidebar, SidebarItem, SidebarSection } from "@workspace/ui/components/sidebar"
 import { Header } from "@workspace/ui/components/header"
-import { 
-  Home, 
-  Building2, 
-  Users, 
-  FileText, 
-  Settings, 
-  BarChart3, 
-  HelpCircle,
-  Plus
-} from "lucide-react"
+import { ChevronLeft, Plus } from "lucide-react"
+import { cn } from "@workspace/ui/lib/utils"
+import { MAIN_SIDEBAR_SECTIONS, PRIMARY_ACTIONS } from "@/constants"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -27,6 +20,10 @@ interface DashboardLayoutProps {
   }
   customSidebarSections?: SidebarSection[]
   activeItem?: string
+  showLogo?: boolean
+  sidebarBackButton?: boolean
+  sidebarBackText?: string
+  onSidebarBackClick?: () => void
 }
 
 export function DashboardLayout({ 
@@ -36,11 +33,18 @@ export function DashboardLayout({
   onBackClick,
   primaryAction,
   customSidebarSections,
-  activeItem: customActiveItem
+  activeItem: customActiveItem,
+  showLogo = true,
+  sidebarBackButton = false,
+  sidebarBackText = "Back",
+  onSidebarBackClick
 }: DashboardLayoutProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [collapsed, setCollapsed] = React.useState(false)
+
+  // Determine if this is a tenant page
+  const isTenantPage = pathname.includes('/tenant/')
 
   // Determine active item based on current pathname or custom active item
   const getActiveItem = () => {
@@ -55,61 +59,6 @@ export function DashboardLayout({
     return "dashboard"
   }
 
-  const sidebarSections: SidebarSection[] = [
-    {
-      title: "Main",
-      items: [
-        {
-          id: "dashboard",
-          label: "Dashboard",
-          icon: Home,
-          href: "/",
-        },
-        {
-          id: "restaurants",
-          label: "Restaurants",
-          icon: Building2,
-          href: "/restaurants",
-        },
-        {
-          id: "users",
-          label: "Users",
-          icon: Users,
-          href: "/users",
-        },
-        {
-          id: "billings",
-          label: "Billings & Plans",
-          icon: FileText,
-          href: "/billings",
-        },
-      ],
-    },
-    {
-      title: "Configurations",
-      items: [
-        {
-          id: "settings",
-          label: "Settings",
-          icon: Settings,
-          href: "/settings",
-        },
-        {
-          id: "monitoring",
-          label: "Monitoring",
-          icon: BarChart3,
-          href: "/monitoring",
-        },
-        {
-          id: "support",
-          label: "Support",
-          icon: HelpCircle,
-          href: "/support",
-        },
-      ],
-    },
-  ]
-
   const handleItemClick = (item: SidebarItem) => {
     if (item.href) {
       router.push(item.href)
@@ -120,31 +69,62 @@ export function DashboardLayout({
   }
 
   const defaultPrimaryAction = {
-    label: "Onboard Restaurant",
-    onClick: () => console.log("Onboard Restaurant clicked"),
+    label: PRIMARY_ACTIONS.ONBOARD_RESTAURANT.label,
+    onClick: PRIMARY_ACTIONS.ONBOARD_RESTAURANT.onClick,
     icon: Plus,
   }
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
-      <Sidebar
-        sections={customSidebarSections || sidebarSections}
-        activeItem={getActiveItem()}
-        onItemClick={handleItemClick}
-        collapsed={collapsed}
-        onToggleCollapse={() => setCollapsed(!collapsed)}
-      />
+      <div className="flex flex-col">
+        {/* Back Button - Above Sidebar */}
+        {isTenantPage && (
+          <div className="mx-4 mt-4 mb-2">
+              <button
+                onClick={() => router.push('/restaurants')}
+                className="flex items-center space-x-3 bg-sidebar border border-sidebar-border rounded-full hover:bg-sidebar-accent transition-all duration-200 w-full sm:w-64 h-12"
+              >
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FFFFFF' }}>
+                <div className="w-6 h-6 bg-muted/50 rounded-full flex items-center justify-center">
+                 <ChevronLeft strokeWidth={3} className="w-5 h-5 text-black" />
+                </div>
+              </div>
+              <span className="text-sidebar-foreground font-medium text-sm">Back to Restaurants</span>
+            </button>
+          </div>
+        )}
+        
+        <Sidebar
+          sections={customSidebarSections || MAIN_SIDEBAR_SECTIONS}
+          activeItem={getActiveItem()}
+          onItemClick={handleItemClick}
+          collapsed={collapsed}
+          onToggleCollapse={() => setCollapsed(!collapsed)}
+          showLogo={isTenantPage ? false : showLogo}
+          showBackButton={false}
+          activeColorTheme={isTenantPage ? 'red' : 'green'}
+        />
+      </div>
       
       <div className="flex-1 flex flex-col min-h-0">
         <Header
           title={title}
-          showBackButton={showBackButton}
+          showBackButton={isTenantPage ? false : showBackButton}
           onBackClick={onBackClick}
           primaryAction={primaryAction || defaultPrimaryAction}
         />
         
-        <main className="flex-1 overflow-y-auto p-4 pb-8 bg-background">
-          <div className="max-w-6xl mx-auto h-full mb-5">
+        <main className={cn(
+          "flex-1 bg-background",
+          isTenantPage 
+            ? "p-4 bg-sidebar rounded-3xl mt-1 mb-6 ml-10 mr-2 overflow-hidden max-w-[1195px]" 
+            : "p-4 pb-8 overflow-y-auto"
+        )}>
+          <div className={cn(
+            isTenantPage 
+              ? "w-full h-full overflow-y-auto scrollbar-hide"
+              : "w-full h-full mb-5"
+          )}>
             {children}
           </div>
         </main>

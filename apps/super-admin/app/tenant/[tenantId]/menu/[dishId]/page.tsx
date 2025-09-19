@@ -2,39 +2,14 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Button } from "@workspace/ui/components/button";
-import { Input } from "@workspace/ui/components/input";
-import { Card, CardContent } from "@workspace/ui/components/card";
-import { Badge } from "@workspace/ui/components/badge";
 import { 
-  FileText,
-  Folder,
-  Users,
-  Settings,
-  Plus,
-  Upload,
-  Save,
-  X,
-  Heart,
-  Clock,
-  Edit,
-  MoreHorizontal,
-  Box,
-  Trash2
-} from "lucide-react";
-import Image from "next/image";
-import { DashboardLayout } from "@/components/dashboard-layout";
-
-interface Allergen {
-  id: string;
-  name: string;
-}
-
-interface Pairing {
-  id: string;
-  name: string;
-  image: string;
-}
+  DishHero,
+  CategoryPills,
+  DishInfo,
+  ModelActions,
+  AllergenSection,
+  PairingSuggestions
+} from "@/components/dish-detail";
 
 export default function DishViewPage() {
   const params = useParams();
@@ -42,268 +17,124 @@ export default function DishViewPage() {
   const tenantId = params.tenantId as string;
   const dishId = params.dishId as string;
 
-  // Mock data - in real app, this would come from API
-  const [dishData] = useState({
+  // Mock data based on the design image
+  const dishData = {
     name: "Hyderabadi Dum Biriyani",
-    description: "A royal blend of fragrant basmati rice, tender meat, and aromatic spices, slow-cooked to perfection. Rich, flavorful, and layered with saffron - the timeless taste of Hyderabad in every bite.",
-    image: "/dish_placeholder.png",
-    isSpecial: true,
-    preparationDate: "2024-01-15",
-    category: "Special Dish"
-  });
+    description: "A royal blend of fragrant basmati rice, tender meat, and aromatic spices, slow-cooked to perfection. Rich, flavorful, and layered with saffron – the timeless taste of Hyderabad in every bite.",
+    image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=800&h=600&fit=crop&crop=center",
+    category: "Special Dish",
+    preparationTime: "10-15 Mins",
+    allergens: ["Nuts", "Egg", "Spicy"]
+  };
 
-  const [allergens, setAllergens] = useState<Allergen[]>([
-    { id: "1", name: "Nuts" },
-    { id: "2", name: "Egg" },
-    { id: "3", name: "Spicy" }
-  ]);
-
-  const [pairings] = useState<Pairing[]>([
-    { id: "1", name: "Orange Juice", image: "/dish_placeholder.png" },
-    { id: "2", name: "Mango Juice", image: "/dish_placeholder.png" },
-    { id: "3", name: "Mango Juice", image: "/dish_placeholder.png" },
-    { id: "4", name: "Mango Juice", image: "/dish_placeholder.png" },
-    { id: "5", name: "Mango Juice", image: "/dish_placeholder.png" }
-  ]);
-
-  const menuSidebarSections = [
+  const pairingSuggestions = [
     {
-      title: "Tenant Settings",
-      items: [
-        {
-          id: "overview",
-          label: "Overview",
-          icon: FileText,
-          href: `/tenant/${tenantId}`
-        },
-        {
-          id: "menu",
-          label: "Menu", 
-          icon: FileText,
-          href: `/tenant/${tenantId}/menu`
-        },
-        {
-          id: "repository",
-          label: "Repository",
-          icon: Folder,
-          href: `/tenant/${tenantId}/repository`
-        },
-        {
-          id: "members",
-          label: "Members",
-          icon: Users,
-          href: `/tenant/${tenantId}/members`
-        },
-        {
-          id: "settings",
-          label: "Settings",
-          icon: Settings,
-          href: `/tenant/${tenantId}/settings`
-        }
-      ]
+      name: "Orange Juice",
+      image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=200&h=150&fit=crop&crop=center"
+    },
+    {
+      name: "Mango Lassi", 
+      image: "https://images.unsplash.com/photo-1546173159-315724a31696?w=200&h=150&fit=crop&crop=center"
+    },
+    {
+      name: "Fresh Lime Soda",
+      image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=200&h=150&fit=crop&crop=center"
+    },
+    {
+      name: "Buttermilk",
+      image: "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?w=200&h=150&fit=crop&crop=center"
+    },
+    {
+      name: "Iced Tea",
+      image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=200&h=150&fit=crop&crop=center"
     }
   ];
 
-  const addAllergen = () => {
-    const newAllergen: Allergen = {
-      id: Date.now().toString(),
-      name: ""
-    };
-    setAllergens(prev => [...prev, newAllergen]);
+  const [allergens, setAllergens] = useState(dishData.allergens);
+
+  // Category pills configuration
+  const categoryPills = [
+    {
+      label: dishData.category,
+      emoji: "❤️",
+      color: "red" as const,
+      showInfo: true
+    },
+    {
+      label: dishData.preparationTime,
+      emoji: "🕐", 
+      color: "green" as const,
+      showInfo: true
+    },
+    {
+      label: "Add Text Property",
+      emoji: "",
+      color: "dashed" as const,
+      showInfo: false
+    }
+  ];
+
+  // Event handlers
+  const handleSaveChanges = () => {
+    console.log("Saving changes...");
   };
 
-  const removeAllergen = (id: string) => {
-    setAllergens(prev => prev.filter(allergen => allergen.id !== id));
+  const handleMenuClick = () => {
+    console.log("Menu clicked...");
   };
 
-  const handleAllergenChange = (id: string, name: string) => {
-    setAllergens(prev => 
-      prev.map(allergen => 
-        allergen.id === id ? { ...allergen, name } : allergen
-      )
-    );
+  const handleDelete3D = () => {
+    console.log("Deleting 3D model...");
   };
 
-  const handleEditDetails = () => {
-    router.push(`/tenant/${tenantId}/menu/${dishId}/edit`);
+  const handleReUpload3D = () => {
+    console.log("Re-uploading 3D model...");
   };
 
-  const handleSave = () => {
-    console.log("Saving dish details:", { dishData, allergens });
-    // Handle save logic here
+  const handleAddAllergen = () => {
+    const newAllergen = prompt("Enter new allergen:");
+    if (newAllergen && newAllergen.trim()) {
+      setAllergens([...allergens, newAllergen.trim()]);
+    }
   };
 
   return (
-    <DashboardLayout 
-      customSidebarSections={menuSidebarSections}
-      activeItem="menu"
-      title="Dish Details"
-      showBackButton={true}
-      onBackClick={() => router.push(`/tenant/${tenantId}/menu`)}
-    >
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Main Dish Image */}
-        <Card>
-          <CardContent className="p-0">
-            <div className="relative">
-              <Image
-                src={dishData.image}
-                alt={dishData.name}
-                width={800}
-                height={400}
-                className="w-full h-96 object-cover rounded-t-lg"
-              />
-            </div>
-          </CardContent>
-        </Card>
+    <div className="space-y-6">
+      {/* Hero Image Section */}
+      <DishHero 
+        imageUrl={dishData.image}
+        dishName={dishData.name}
+      />
 
-        {/* Dish Details Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Dish Tags and Edit Button */}
-            <div className="flex flex-wrap gap-3 items-start justify-between">
-              <div className="flex flex-wrap gap-3">
-                {dishData.isSpecial && (
-                  <Badge className="bg-red-600 text-white flex items-center gap-2 px-3 py-1">
-                    <Heart className="h-4 w-4" />
-                    Special Dish
-                  </Badge>
-                )}
-                <Badge className="bg-green-600 text-white flex items-center gap-2 px-3 py-1">
-                  <Clock className="h-4 w-4" />
-                  {dishData.preparationDate}
-                </Badge>
-                <Button
-                  variant="outline"
-                  className="border-dashed border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-full px-4 py-2"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Text Property
-                </Button>
-              </div>
-              <Button 
-                onClick={handleEditDetails}
-                className="bg-green-600 text-white hover:bg-green-700 flex items-center gap-2"
-              >
-                <Edit className="h-4 w-4" />
-                Edit Details
-              </Button>
-            </div>
+      {/* Category Pills and Save Button Row */}
+      <CategoryPills 
+        pills={categoryPills}
+        onSaveChanges={handleSaveChanges}
+        onMenuClick={handleMenuClick}
+      />
 
-            {/* Dish Name */}
-            <h1 className="text-4xl font-bold text-foreground">{dishData.name}</h1>
+      {/* Dish Info */}
+      <DishInfo 
+        title={dishData.name}
+        description={dishData.description}
+      />
 
-            {/* Description and Actions */}
-            <div className="flex flex-col lg:flex-row gap-6">
-              <div className="flex-1">
-                <p className="text-muted-foreground text-lg leading-relaxed">
-                  {dishData.description}
-                </p>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Button 
-                  className="bg-red-600 text-white hover:bg-red-700 flex items-center gap-2"
-                >
-                  <Box className="h-4 w-4" />
-                  Try in 3D
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+      {/* 3D Model Actions */}
+      <ModelActions 
+        onDelete={handleDelete3D}
+        onReUpload={handleReUpload3D}
+      />
 
-            {/* 3D Model Actions */}
-            <div className="flex gap-4">
-              <Button className="bg-red-600 text-white hover:bg-red-700 flex items-center gap-2">
-                <Box className="h-4 w-4" />
-                Delete 3D
-              </Button>
-              <Button className="bg-muted text-muted-foreground hover:bg-muted/80 flex items-center gap-2">
-                <Upload className="h-4 w-4" />
-                Re Upload 3D
-              </Button>
-            </div>
-          </div>
+      {/* Allergen Section */}
+      <AllergenSection 
+        allergens={allergens}
+        onAddAllergen={handleAddAllergen}
+      />
 
-          {/* Right Column - Actions */}
-          <div className="space-y-6">
-            <Button 
-              onClick={handleSave}
-              className="w-full bg-green-600 text-white hover:bg-green-700 flex items-center gap-2"
-            >
-              <Save className="h-4 w-4" />
-              Save Changes
-            </Button>
-          </div>
-        </div>
-
-        {/* Allergen Section */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground">Allergen</h3>
-              
-              <div className="flex flex-wrap gap-3">
-                {allergens.map((allergen) => (
-                  <div key={allergen.id} className="flex items-center gap-2 bg-muted rounded-full px-4 py-2">
-                    <span className="text-muted-foreground">{allergen.name}</span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeAllergen(allergen.id)}
-                      className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-                
-                <Button
-                  onClick={addAllergen}
-                  variant="outline"
-                  className="border-dashed border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-full px-4 py-2"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Pairing Suggestions */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground">Pairing Suggestions</h3>
-              <p className="text-muted-foreground">Perfect match with these favorites.</p>
-              
-              <div className="flex gap-4 overflow-x-auto scrollbar-hide flex-nowrap">
-                {pairings.map((pairing) => (
-                  <div key={pairing.id} className="flex-shrink-0">
-                    <div className="w-32 h-32 bg-muted rounded-lg overflow-hidden">
-                      <Image
-                        src={pairing.image}
-                        alt={pairing.name}
-                        width={128}
-                        height={128}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-2 text-center">{pairing.name}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </DashboardLayout>
+      {/* Pairing Suggestions */}
+      <PairingSuggestions 
+        suggestions={pairingSuggestions}
+      />
+    </div>
   );
 }

@@ -2,7 +2,8 @@ import * as React from "react"
 import { 
   LogOut,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ArrowLeft
 } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
@@ -28,10 +29,27 @@ export interface SidebarProps {
   collapsed?: boolean
   onToggleCollapse?: () => void
   className?: string
+  showLogo?: boolean
+  showBackButton?: boolean
+  backButtonText?: string
+  onBackClick?: () => void
+  activeColorTheme?: 'green' | 'red'
 }
 
 const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
-  ({ sections, activeItem, onItemClick, collapsed = false, onToggleCollapse, className }, ref) => {
+  ({ 
+    sections, 
+    activeItem, 
+    onItemClick, 
+    collapsed = false, 
+    onToggleCollapse, 
+    className,
+    showLogo = true,
+    showBackButton = false,
+    backButtonText = "Back",
+    onBackClick,
+    activeColorTheme = 'green'
+  }, ref) => {
     const [isDark, setIsDark] = React.useState(false)
 
     React.useEffect(() => {
@@ -46,6 +64,33 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       return () => observer.disconnect()
     }, [])
 
+    // Dynamic color scheme based on activeColorTheme
+    const getActiveColors = () => {
+      if (activeColorTheme === 'red') {
+        return {
+          bg: 'bg-red-600',
+          hover: 'hover:bg-red-700',
+          hoverBg: 'hover:bg-red-500/10',
+          darkBg: '#FF1833',
+          lightBg: '#FF1833',
+          lightHover: 'rgba(255, 24, 51, 0.1)',
+          darkHover: 'rgba(255, 24, 51, 0.2)'
+        }
+      } else {
+        return {
+          bg: 'bg-green-600',
+          hover: 'hover:bg-green-700',
+          hoverBg: 'hover:bg-green-500/10',
+          darkBg: '#1D923C',
+          lightBg: '#1D923C',
+          lightHover: 'rgba(34, 197, 94, 0.1)',
+          darkHover: 'rgba(34, 197, 94, 0.2)'
+        }
+      }
+    }
+
+    const activeColors = getActiveColors()
+
     return (
       <div
         ref={ref}
@@ -55,36 +100,53 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
           className
         )}
       >
-        {/* Header */}
-        <div className="flex items-center justify-center p-6">
-          {!collapsed && (
-            <div className="flex items-center justify-center">
+        {/* Back Button - Only shown when showBackButton is true */}
+        {showBackButton && !collapsed && (
+          <div className="p-4 pb-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onBackClick}
+              className="w-full justify-start h-10 rounded-full text-sidebar-foreground hover:bg-sidebar-accent"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              {backButtonText}
+            </Button>
+          </div>
+        )}
+
+        {/* Header with Logo - Only shown when showLogo is true */}
+        {showLogo && (
+          <div className="flex items-center justify-center p-6">
+            {!collapsed && (
+              <div className="flex items-center justify-center">
+                <img 
+                  src="/logo.png" 
+                  alt="Logo" 
+                  className="h-10 w-10 object-contain"
+                  loading="lazy"
+                />
+                <img 
+                  src="/cavyor logo.png" 
+                  alt="Cavyor" 
+                  className="h-12 w-auto object-contain mt-2"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            {collapsed && (
               <img 
                 src="/logo.png" 
                 alt="Logo" 
-                className="h-10 w-10 object-contain"
+                className="h-8 w-8 object-contain mx-auto"
                 loading="lazy"
               />
-              <img 
-                src="/cavyor logo.png" 
-                alt="Cavyor" 
-                className="h-12 w-auto object-contain mt-2"
-                loading="lazy"
-              />
-            </div>
-          )}
-          {collapsed && (
-            <img 
-              src="/logo.png" 
-              alt="Logo" 
-              className="h-8 w-8 object-contain mx-auto"
-              loading="lazy"
-            />
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         {/* Navigation */}
-        <div className="flex-1 overflow-y-auto px-4 space-y-6">
+        <div className="flex-1 overflow-y-auto px-4 space-y-6 pt-8">
           {sections.map((section, sectionIndex) => (
             <div key={sectionIndex} className="space-y-3">
               {section.title && !collapsed && (
@@ -96,6 +158,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                 {section.items.map((item) => {
                   const Icon = item.icon
                   const isActive = activeItem === item.id
+                  const [isHovered, setIsHovered] = React.useState(false)
                   
                   return (
                     <Button
@@ -103,66 +166,48 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                       variant="ghost"
                       size="sm"
                       className={cn(
-                        "w-full justify-start h-12 rounded-3xl transition-all duration-200 cursor-pointer",
-                        isActive 
-                          ? "bg-green-600 text-white hover:bg-green-700 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]" 
-                          : "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:shadow-sm hover:scale-[1.01] active:scale-[0.99]",
+                        "w-full justify-start h-12 rounded-3xl transition-all duration-200 cursor-pointer text-white hover:shadow-md hover:scale-[1.02] active:scale-[0.98]",
+                        !isActive && (isDark
+                              ? "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:shadow-sm hover:scale-[1.01] active:scale-[0.99]"
+                              : "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:shadow-sm hover:scale-[1.01] active:scale-[0.99]"
+                            ),
                         collapsed && "justify-center px-2"
                       )}
                       onClick={() => onItemClick?.(item)}
                       style={{
-                        backgroundColor: !isActive ? (isDark ? '#242424' : '#f1f5f9') : undefined
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isActive) {
-                          e.currentTarget.style.backgroundColor = isDark ? 'rgba(34, 197, 94, 0.2)' : 'rgba(34, 197, 94, 0.1)'
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isActive) {
-                          e.currentTarget.style.backgroundColor = isDark ? '#242424' : '#f1f5f9'
-                        }
-                      }}
-                    >
-                      <div className={cn(
-                        "flex items-center justify-center rounded-full transition-all duration-200",
-                        "w-8 h-8",
-                        isActive 
-                          ? (isDark ? "hover:opacity-90" : "bg-green-500 hover:bg-green-600")
-                          : "",
-                        !collapsed && "mr-3"
-                      )}
-                      style={{
                         backgroundColor: isActive 
-                          ? (isDark ? '#1D923C' : undefined)
-                          : (isDark ? '#393939' : '#e2e8f0')
+                          ? (isDark ? activeColors.darkBg : activeColors.lightBg)
+                          : (isDark ? '#242424' : '#f1f5f9'),
+                        ...(isHovered && !isActive && {
+                          backgroundColor: isDark ? activeColors.darkHover : activeColors.lightHover
+                        })
                       }}
-                      onMouseEnter={(e) => {
-                        if (!isActive) {
-                          e.currentTarget.style.backgroundColor = isDark ? 'rgba(34, 197, 94, 0.3)' : 'rgba(34, 197, 94, 0.2)'
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isActive) {
-                          e.currentTarget.style.backgroundColor = isDark ? '#393939' : '#e2e8f0'
-                        }
-                      }}>
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                    >
+                      <div
+                        className={cn(
+                          "flex items-center justify-center rounded-full transition-all duration-200 w-8 h-8",
+                          !collapsed && "mr-3"
+                        )}
+                        style={{
+                          backgroundColor: isActive
+                            ? (isDark ? activeColors.darkBg : activeColors.lightBg)
+                            : (isDark ? '#393939' : '#e2e8f0')
+                        }}
+                      >
                         <Icon className={cn(
                           "h-4 w-4",
-                          isActive 
-                            ? "text-white" 
+                          isActive
+                            ? "text-white"
                             : (isDark ? "text-white" : "text-gray-600")
                         )} />
                       </div>
-                      {!collapsed && (
-                        <>
-                          <span className="flex-1 text-left font-medium">{item.label}</span>
-                          {item.badge && (
-                            <span className="ml-auto bg-red-600/20 text-red-400 text-xs px-1.5 py-0.5 rounded-full">
-                              {item.badge}
-                            </span>
-                          )}
-                        </>
+                      {!collapsed && <span className="font-medium">{item.label}</span>}
+                      {item.badge && !collapsed && (
+                        <span className="ml-auto bg-sidebar-accent text-sidebar-accent-foreground rounded-full px-2 py-1 text-xs">
+                          {item.badge}
+                        </span>
                       )}
                     </Button>
                   )
@@ -172,34 +217,38 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
           ))}
         </div>
 
-        {/* Footer */}
-        <div className="p-4">
+        {/* Logout Button */}
+        <div className="p-4 pt-2">
           <Button
             variant="ghost"
             size="sm"
             className={cn(
-              "w-full justify-start h-12 rounded-3xl text-sidebar-foreground/80 hover:text-sidebar-foreground transition-all duration-200 cursor-pointer hover:shadow-sm hover:scale-[1.01] active:scale-[0.99]",
+              "w-full justify-start h-12 rounded-3xl transition-all duration-200 cursor-pointer",
+              isDark
+                ? "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:shadow-sm hover:scale-[1.01] active:scale-[0.99]"
+                : "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-green-500/10 hover:shadow-sm hover:scale-[1.01] active:scale-[0.99]",
               collapsed && "justify-center px-2"
             )}
             style={{
               backgroundColor: isDark ? '#242424' : '#f1f5f9'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = isDark ? 'rgba(34, 197, 94, 0.2)' : 'rgba(34, 197, 94, 0.1)'
+              e.currentTarget.style.backgroundColor = isDark ? '#ff1833' : '#ef4444'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = isDark ? '#242424' : '#f1f5f9'
             }}
           >
-            <div className={cn(
-              "flex items-center justify-center rounded-full transition-all duration-200",
-              "w-8 h-8 bg-red-600 hover:bg-red-700",
-              !collapsed && "mr-3"
-            )}
-            style={{
-              backgroundColor: '#dc2626'
-            }}>
-              <LogOut className="h-4 w-4 text-white rotate-180" />
+            <div
+              className={cn(
+                "flex items-center justify-center rounded-full transition-all duration-200 w-8 h-8",
+                !collapsed && "mr-3"
+              )}
+              style={{
+                backgroundColor: isDark ? '#dc2626' : '#ef4444'
+              }}
+            >
+              <LogOut className="h-4 w-4 text-white" />
             </div>
             {!collapsed && <span className="font-medium">Log Out</span>}
           </Button>
@@ -208,6 +257,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
     )
   }
 )
+
 Sidebar.displayName = "Sidebar"
 
 export { Sidebar }
