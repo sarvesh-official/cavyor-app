@@ -126,7 +126,7 @@ export function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       <Sidebar
         sections={customSidebarSections || sidebarSections}
         activeItem={getActiveItem()}
@@ -135,7 +135,7 @@ export function DashboardLayout({
         onToggleCollapse={() => setCollapsed(!collapsed)}
       />
       
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col min-h-0">
         <Header
           title={title}
           showBackButton={showBackButton}
@@ -143,8 +143,10 @@ export function DashboardLayout({
           primaryAction={primaryAction || defaultPrimaryAction}
         />
         
-        <main className="flex-1 overflow-y-auto p-6 bg-background">
-          {children}
+        <main className="flex-1 overflow-y-auto p-4 pb-8 bg-background">
+          <div className="max-w-6xl mx-auto h-full mb-5">
+            {children}
+          </div>
         </main>
       </div>
     </div>

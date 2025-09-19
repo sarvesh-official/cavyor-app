@@ -39,36 +39,36 @@ const dishesData = [
 
 export function DashboardCharts() {
   return (
-    <div className="grid gap-6 md:grid-cols-2 mt-8">
+    <div className="grid gap-4 md:grid-cols-2">
       {/* Subscriptions Chart */}
-      <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+      <div className="bg-card border border-border rounded-2xl p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">Subscriptions</h3>
+          <h3 className="text-lg font-semibold text-foreground">Subscriptions</h3>
           <div className="text-right">
-            <div className="text-2xl font-bold text-green-600">+2,250</div>
-            <div className="text-sm text-gray-400">+180.1% from last month</div>
+            <div className="text-2xl font-bold text-success">+2,250</div>
+            <div className="text-sm text-muted-foreground">+180.1% from last month</div>
           </div>
         </div>
-        <div className="h-64">
+        <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={subscriptionData}>
               <defs>
                 <linearGradient id="subscriptionGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.05}/>
+                  <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#22c55e" stopOpacity={0.05}/>
                 </linearGradient>
               </defs>
               <XAxis 
                 dataKey="month" 
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#9ca3af', fontSize: 12 }}
+                tick={{ fill: '#6b7280', fontSize: 12 }}
               />
               <YAxis hide />
               <Area 
                 type="monotone" 
                 dataKey="value" 
-                stroke="#10b981" 
+                stroke="#22c55e" 
                 strokeWidth={2}
                 fill="url(#subscriptionGradient)" 
               />
@@ -78,26 +78,26 @@ export function DashboardCharts() {
       </div>
 
       {/* Total Dishes Chart */}
-      <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+      <div className="bg-card border border-border rounded-2xl p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">Total Dishes</h3>
+          <h3 className="text-lg font-semibold text-foreground">Total Dishes</h3>
           <div className="text-right">
-            <div className="text-2xl font-bold text-white">500</div>
+            <div className="text-2xl font-bold text-foreground">500</div>
           </div>
         </div>
-        <div className="h-64">
+        <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dishesData}>
               <XAxis 
                 dataKey="name" 
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#9ca3af', fontSize: 12 }}
+                tick={{ fill: '#6b7280', fontSize: 12 }}
               />
               <YAxis hide />
               <Bar 
                 dataKey="value" 
-                fill="#f59e0b"
+                fill="#eab308"
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>

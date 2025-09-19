@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card"
 import { Badge } from "@workspace/ui/components/badge"
@@ -12,12 +13,13 @@ import {
   TableHeader,
   TableRow,
 } from "@workspace/ui/components/table"
-import { Building2, MoreHorizontal } from "lucide-react"
+import { Building2, MoreHorizontal, Plus } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
 import { useRouter } from "next/navigation"
 
 export default function RestaurantsPage() {
   const router = useRouter()
+  const [activeFilter, setActiveFilter] = React.useState("All")
   
   const restaurants = [
     {
@@ -89,74 +91,87 @@ export default function RestaurantsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <Building2 className="h-6 w-6 text-white" />
-          <div>
-            <h1 className="text-3xl font-bold text-white">Restaurants</h1>
-            <p className="text-gray-400">List of restaurants</p>
-          </div>
-        </div>
-
-        <Card className="bg-gray-800 border-gray-700">
-          <CardHeader>
+      <div className="space-y-6 p-6">
+        {/* Filters and Table Card */}
+        <Card className="bg-card border-border rounded-2xl">
+          <CardHeader className="pb-6">
             <div className="flex items-center justify-between">
-              <div className="flex space-x-1">
-                {statusFilters.map((filter) => (
-                  <Button
-                    key={filter}
-                    variant="ghost"
-                    size="sm"
-                    className={cn(
-                      "text-sm",
-                      filter === "All" 
-                        ? "bg-white text-black" 
-                        : "text-gray-400 hover:bg-gray-700 hover:text-white"
-                    )}
-                  >
-                    {filter}
-                  </Button>
-                ))}
+              <div className="flex items-center space-x-4">
+                <div className="p-2 bg-muted rounded-lg">
+                  <Building2 className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-semibold text-foreground">Restaurants</h1>
+                  <p className="text-sm text-muted-foreground">List of restaurants</p>
+                </div>
               </div>
-              <Button className="flex items-center space-x-2 bg-white text-black hover:bg-gray-100">
-                <Building2 className="h-4 w-4" />
-                <span>View All Restaurants</span>
-              </Button>
+              
+              <div className="flex items-center justify-center flex-1 mx-8">
+                <div className="flex space-x-1 border border-white/50 rounded-full p-1">
+                  {statusFilters.map((filter) => (
+                    <Button
+                      key={filter}
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "px-4 py-2 text-sm rounded-full transition-all duration-200 cursor-pointer",
+                        activeFilter === filter 
+                          ? "bg-primary text-primary-foreground" 
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
+                      onClick={() => setActiveFilter(filter)}
+                    >
+                      {filter}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="w-[200px]"></div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             <Table>
               <TableHeader>
-                <TableRow className="border-gray-700">
-                  <TableHead className="text-gray-400">Name</TableHead>
-                  <TableHead className="text-gray-400">Subscription</TableHead>
-                  <TableHead className="text-gray-400">Location</TableHead>
-                  <TableHead className="text-gray-400">Status</TableHead>
-                  <TableHead className="text-gray-400">Actions</TableHead>
+                <TableRow className="border-border hover:bg-transparent">
+                  <TableHead className="text-muted-foreground font-medium">Name</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Subscription</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Location</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Status</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {restaurants.map((restaurant) => (
-                  <TableRow key={restaurant.id} className="border-gray-700 hover:bg-gray-700/20">
+                  <TableRow 
+                    key={restaurant.id} 
+                    className="border-border hover:bg-muted/20 cursor-pointer transition-colors duration-200"
+                    onClick={() => router.push(`/tenant/${restaurant.id}`)}
+                  >
                     <TableCell>
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
                           <span className="text-white font-bold text-sm">M</span>
                         </div>
-                        <span className="font-medium text-white">{restaurant.name}</span>
+                        <span className="font-medium text-foreground">{restaurant.name}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-white">{restaurant.subscription}</TableCell>
-                    <TableCell className="text-white">{restaurant.location}</TableCell>
+                    <TableCell className="text-foreground">{restaurant.subscription}</TableCell>
+                    <TableCell className="text-foreground">{restaurant.location}</TableCell>
                     <TableCell>
-                      <Badge className="bg-green-600 text-white">{restaurant.status}</Badge>
+                      <Badge className="bg-green-600 text-white hover:bg-green-700 rounded-full px-3 py-1">
+                        {restaurant.status}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <Button 
                         variant="ghost" 
-                        size="icon-sm" 
-                        className="text-gray-400 hover:text-white"
-                        onClick={() => router.push(`/tenant/${restaurant.id}`)}
+                        size="icon"
+                        className="text-muted-foreground hover:text-foreground hover:bg-muted rounded-full h-8 w-8"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          // Handle actions menu
+                        }}
                       >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>

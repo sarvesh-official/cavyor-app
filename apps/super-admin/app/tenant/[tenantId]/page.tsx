@@ -68,25 +68,25 @@ export default function TenantSettingsPage({ params }: TenantSettingsPageProps) 
       icon: FileText,
       label: "Dishes on Menu",
       value: "14",
-      color: "text-blue-500"
+      color: "#4CAF50"
     },
     {
       icon: Building2,
       label: "Outlets",
       value: "14",
-      color: "text-yellow-500"
+      color: "#FF9800"
     },
     {
       icon: Star,
       label: "Subscription",
       value: "$200/yr",
-      color: "text-yellow-500"
+      color: "#FFD700"
     },
     {
       icon: Users,
       label: "Total Employees",
       value: "20",
-      color: "text-blue-500"
+      color: "#2196F3"
     }
   ]
 
@@ -163,25 +163,25 @@ export default function TenantSettingsPage({ params }: TenantSettingsPageProps) 
         {/* Restaurant Banner */}
         <div className="relative">
           <div 
-            className="h-48 rounded-lg overflow-hidden relative"
+            className="h-48 rounded-2xl overflow-hidden relative bg-cover bg-center"
             style={{ 
-              background: `linear-gradient(to right, ${branding.primaryColor}, ${branding.primaryColor}dd)`
+              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><rect fill="%23dc2626" width="1200" height="400"/></svg>')`,
+              backgroundColor: branding.primaryColor
             }}
           >
-            {/* KFC Banner Image Placeholder */}
+            {/* KFC Banner Content */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-white text-center">
-                <div className="text-4xl font-bold mb-2">KFC</div>
-                <div className="text-lg opacity-90">Kentucky Fried Chicken</div>
+                <div className="text-6xl font-bold mb-2">KFC</div>
+                <div className="text-xl opacity-90">Kentucky Fried Chicken</div>
               </div>
             </div>
-            <div className="absolute inset-0 bg-black/30"></div>
           </div>
           
           {/* Profile Picture */}
           <div className="absolute -bottom-8 left-6">
             <div 
-              className="w-16 h-16 rounded-full flex items-center justify-center border-4 border-gray-800"
+              className="w-16 h-16 rounded-full flex items-center justify-center border-4 border-background"
               style={{ backgroundColor: branding.primaryColor }}
             >
               <User className="h-8 w-8 text-white" />
@@ -196,7 +196,7 @@ export default function TenantSettingsPage({ params }: TenantSettingsPageProps) 
 
           {/* View Link Button */}
           <div className="absolute bottom-4 right-4">
-            <Button variant="ghost" className="text-white hover:bg-white/20">
+            <Button variant="ghost" className="text-white hover:bg-white/20 rounded-full">
               <MapPin className="h-4 w-4 mr-2" />
               View Link
               <ChevronDown className="h-4 w-4 ml-2" />
@@ -209,15 +209,15 @@ export default function TenantSettingsPage({ params }: TenantSettingsPageProps) 
           {metrics.map((metric, index) => {
             const Icon = metric.icon
             return (
-              <Card key={index} className="bg-gray-800 border-gray-700">
+              <Card key={index} className="bg-card border-border rounded-2xl">
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-3">
-                    <div className={`p-2 bg-gray-700 rounded-lg`}>
-                      <Icon className={`h-5 w-5 ${metric.color}`} />
+                    <div className="p-2 bg-muted rounded-lg">
+                      <Icon className="h-5 w-5" style={{ color: metric.color }} />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-400">{metric.label}</p>
-                      <p className="text-lg font-bold text-white">{metric.value}</p>
+                      <p className="text-sm text-muted-foreground">{metric.label}</p>
+                      <p className="text-lg font-bold text-foreground">{metric.value}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -228,43 +228,43 @@ export default function TenantSettingsPage({ params }: TenantSettingsPageProps) 
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-          <Card className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors cursor-pointer" onClick={() => router.push(`/tenant/${tenantId}/menu`)}>
+          <Card className="bg-card border-border rounded-2xl hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => router.push(`/tenant/${tenantId}/menu`)}>
             <CardContent className="p-6 text-center">
               <div className="flex flex-col items-center space-y-3">
-                <div className="p-3 bg-gray-700 rounded-lg">
-                  <FileText className="h-6 w-6 text-white" />
+                <div className="p-3 bg-muted rounded-lg">
+                  <FileText className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">Manage Menu</h3>
-                  <p className="text-gray-400 text-sm">View and edit restaurant menu</p>
+                  <h3 className="text-foreground font-semibold">Manage Menu</h3>
+                  <p className="text-muted-foreground text-sm">View and edit restaurant menu</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors cursor-pointer">
+          <Card className="bg-card border-border rounded-2xl hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="p-6 text-center">
               <div className="flex flex-col items-center space-y-3">
-                <div className="p-3 bg-gray-700 rounded-lg">
-                  <Users className="h-6 w-6 text-white" />
+                <div className="p-3 bg-muted rounded-lg">
+                  <Users className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">Team Members</h3>
-                  <p className="text-gray-400 text-sm">Manage staff and permissions</p>
+                  <h3 className="text-foreground font-semibold">Team Members</h3>
+                  <p className="text-muted-foreground text-sm">Manage staff and permissions</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors cursor-pointer">
+          <Card className="bg-card border-border rounded-2xl hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="p-6 text-center">
               <div className="flex flex-col items-center space-y-3">
-                <div className="p-3 bg-gray-700 rounded-lg">
-                  <BarChart3 className="h-6 w-6 text-white" />
+                <div className="p-3 bg-muted rounded-lg">
+                  <BarChart3 className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">Analytics</h3>
-                  <p className="text-gray-400 text-sm">View performance metrics</p>
+                  <h3 className="text-foreground font-semibold">Analytics</h3>
+                  <p className="text-muted-foreground text-sm">View performance metrics</p>
                 </div>
               </div>
             </CardContent>
@@ -272,79 +272,79 @@ export default function TenantSettingsPage({ params }: TenantSettingsPageProps) 
         </div>
 
         {/* Restaurant Details Grid */}
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-card border-border rounded-2xl">
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-gray-400">Owner Name</label>
-                  <p className="text-white font-medium">{restaurantData.ownerName}</p>
+                  <label className="text-sm text-muted-foreground">Owner Name</label>
+                  <p className="text-foreground font-medium">{restaurantData.ownerName}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Admin Mail</label>
-                  <p className="text-white font-medium">{restaurantData.adminMail}</p>
+                  <label className="text-sm text-muted-foreground">Admin Mail</label>
+                  <p className="text-foreground font-medium">{restaurantData.adminMail}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Joining Date</label>
-                  <p className="text-white font-medium">{restaurantData.joiningDate}</p>
+                  <label className="text-sm text-muted-foreground">Joining Date</label>
+                  <p className="text-foreground font-medium">{restaurantData.joiningDate}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Expiry Date</label>
-                  <p className="text-white font-medium">{restaurantData.expiryDate}</p>
+                  <label className="text-sm text-muted-foreground">Expiry Date</label>
+                  <p className="text-foreground font-medium">{restaurantData.expiryDate}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Restaurant Type</label>
-                  <p className="text-white font-medium">{restaurantData.restaurantType}</p>
+                  <label className="text-sm text-muted-foreground">Restaurant Type</label>
+                  <p className="text-foreground font-medium">{restaurantData.restaurantType}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Cuisine</label>
-                  <p className="text-white font-medium">{restaurantData.cuisine}</p>
+                  <label className="text-sm text-muted-foreground">Cuisine</label>
+                  <p className="text-foreground font-medium">{restaurantData.cuisine}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Corp. PAN</label>
-                  <p className="text-white font-medium">{restaurantData.corpPAN}</p>
+                  <label className="text-sm text-muted-foreground">Corp. PAN</label>
+                  <p className="text-foreground font-medium">{restaurantData.corpPAN}</p>
                 </div>
               </div>
               
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-gray-400">Owner PAN</label>
-                  <p className="text-white font-medium">{restaurantData.ownerPAN}</p>
+                  <label className="text-sm text-muted-foreground">Owner PAN</label>
+                  <p className="text-foreground font-medium">{restaurantData.ownerPAN}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">GST/VAT Number</label>
-                  <p className="text-white font-medium">{restaurantData.gstVatNumber}</p>
+                  <label className="text-sm text-muted-foreground">GST/VAT Number</label>
+                  <p className="text-foreground font-medium">{restaurantData.gstVatNumber}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Default Currency</label>
-                  <p className="text-white font-medium">{restaurantData.defaultCurrency}</p>
+                  <label className="text-sm text-muted-foreground">Default Currency</label>
+                  <p className="text-foreground font-medium">{restaurantData.defaultCurrency}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Opening Hours</label>
-                  <p className="text-white font-medium">{restaurantData.openingHours}</p>
+                  <label className="text-sm text-muted-foreground">Opening Hours</label>
+                  <p className="text-foreground font-medium">{restaurantData.openingHours}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">No. Of Tables</label>
-                  <p className="text-white font-medium">{restaurantData.noOfTables}</p>
+                  <label className="text-sm text-muted-foreground">No. Of Tables</label>
+                  <p className="text-foreground font-medium">{restaurantData.noOfTables}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Primary Color</label>
+                  <label className="text-sm text-muted-foreground">Primary Color</label>
                   <div className="flex items-center space-x-2">
                     <div 
-                      className="w-6 h-6 rounded border border-gray-600"
+                      className="w-8 h-8 rounded-full border-2 border-border"
                       style={{ backgroundColor: branding.primaryColor }}
                     ></div>
-                    <span className="text-white font-medium">{branding.primaryColor}</span>
+                    <span className="text-foreground font-medium">{branding.primaryColor}</span>
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400">Secondary Color</label>
+                  <label className="text-sm text-muted-foreground">Secondary Color</label>
                   <div className="flex items-center space-x-2">
                     <div 
-                      className="w-6 h-6 rounded border border-gray-600"
+                      className="w-8 h-8 rounded-full border-2 border-border"
                       style={{ backgroundColor: branding.secondaryColor }}
                     ></div>
-                    <span className="text-white font-medium">{branding.secondaryColor}</span>
+                    <span className="text-foreground font-medium">{branding.secondaryColor}</span>
                   </div>
                 </div>
               </div>

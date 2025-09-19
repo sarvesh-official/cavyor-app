@@ -1,6 +1,13 @@
 
+import { Urbanist } from "next/font/google"
+
 import "@workspace/ui/globals.css"
 import { BrandingProvider } from "@/components/branding-provider";
+
+const fontSans = Urbanist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 
 export default function RootLayout({
   children,
@@ -9,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body >
+      <body className={`${fontSans.variable} font-sans antialiased`}>
         <BrandingProvider>
           {children}
         </BrandingProvider>
